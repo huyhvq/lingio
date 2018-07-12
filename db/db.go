@@ -1,10 +1,5 @@
 package db
 
-import (
-	"sort"
-	"fmt"
-)
-
 type DB struct {
 	f []Field
 }
@@ -21,12 +16,10 @@ func NewDB() (DB) {
 }
 
 func (db *DB) Set(f Field) {
-	_, isExisted := db.GetByUserIdAndGameId(f.UserId, f.GameId)
-	fmt.Printf("%v\n", isExisted)
-	if !isExisted {
+	_, exists := db.GetByUserIdAndGameId(f.UserId, f.GameId)
+	if !exists {
 		db.f = append(db.f, f)
 	}
-	fmt.Printf("%v\n", db.f)
 }
 
 func (db *DB) GetUserScoresByUserId(uId string) (int) {
@@ -39,15 +32,30 @@ func (db *DB) GetUserScoresByUserId(uId string) (int) {
 	return total
 }
 
+func (db *DB) GetUserMedalByUserId(uId string) (int) {
+	medal := 0
+	userGame := make(map[string][]Field)
+
+	for _, f := range db.f {
+		if f.UserId == uId && f.Score > 10 {
+			userGame[f.Level] = append(userGame[f.Level], f)
+		}
+	}
+
+	for _, f := range userGame {
+		if len(f) >= 3 {
+			medal++
+		}
+	}
+
+	return medal
+}
+
 func (db *DB) GetByUserIdAndGameId(uId string, gId string) (Field, bool) {
-	sort.Slice(db.f, func(i, j int) bool {
-		return db.f[i].UserId <= db.f[i].UserId
-	})
-	idx := sort.Search(len(db.f), func(i int) bool {
-		return db.f[i].UserId == uId && db.f[i].GameId == gId
-	})
-	if idx != 0 {
-		return db.f[idx], true
+	for _, f := range db.f {
+		if f.UserId == uId && f.GameId == gId {
+			return f, true
+		}
 	}
 	return Field{}, false
 }
