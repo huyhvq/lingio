@@ -1,0 +1,127 @@
+openapi: 3.0.0
+info:
+  title: API
+  description: Test API.
+  version: 0.0.1
+
+servers:
+  - url: http://127.0.0.1:8099
+    description: dev environment.
+
+paths:
+  /users/{user_id}/games/{game_id}:
+    post:
+      summary: Store game data.
+      description: Store game data by user id and game id.
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: string
+        - name: game_id
+          in: path
+          description: ID of game
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: game data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoreData'
+      responses:
+        '200':    # status code
+          description: A JSON object of id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    description: user ID.
+                  game_id:
+                    type: string
+                    description: game ID.
+                  level:
+                    type: string
+                    description: level.
+                  score:
+                    type: integer
+                    description: score.
+                example:
+                  user_id: "huyhvq"
+                  game_id: "1"
+                  level: "1"
+                  score: 1000
+  /users/{user_id}/scores:
+    get:
+      summary: Returns user scores.
+      description: Get user score by user id.
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: A JSON object of id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    description: User ID.
+                  total_scores:
+                    type: integer
+                    description: Score ID.
+                example:
+                  user_id: "huyhvq"
+                  total_scores: 250
+  /users/{user_id}/medal:
+    get:
+      summary: Returns user medal.
+      description: Get user medal by user id.
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':    # status code
+          description: A JSON object of id
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                    description: User ID.
+                  total_medal:
+                    type: integer
+                    description: Score ID.
+                example:
+                  user_id: "huyhvq"
+                  total_medal: 2
+components:
+  schemas:
+    ScoreData:
+      required:
+        - level
+        - score
+      properties:
+        level:
+          type: string
+        score:
+          type: integer
