@@ -46,6 +46,14 @@ func (h *Handler) UserScores(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+func (h *Handler) Index(w http.ResponseWriter, r *http.Request) {
+	util.ResponseOk(w, struct {
+		Name string `json:"name"`
+		Docs string `json:"docs"`
+	}{Name: "Game API Service", Docs: "http://" + r.Host + "/docs/index.html"})
+	return
+}
+
 func (h *Handler) UserMedals(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userId := vars["user_id"]

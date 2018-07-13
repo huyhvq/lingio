@@ -10,3 +10,6 @@ build docker image:
 ```bash
 make docker
 ```
+
+## API Specification
+you can see in api.yml or `ip:8099/docs/index.html`
